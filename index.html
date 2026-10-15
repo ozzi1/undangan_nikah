@@ -7,7 +7,7 @@
 <meta name="referrer" content="no-referrer">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 /* ===================== TEMA (ubah warna di sini) ===================== */
@@ -15,47 +15,37 @@
   --teal:#12303a; --mist:#e9eff0; --brass:#b58a4a; --dust:#c98f8f; --ink:#0d1f25;
   --serif:'Cormorant Garamond', Georgia, serif;
   --sans:'Jost', system-ui, sans-serif;
-  --shadow-soft:0 14px 34px rgba(13,31,37,.14);
-  --shadow-deep:0 18px 40px rgba(13,31,37,.35);
+  --nav-h:72px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);color:var(--ink);background:#0a1a20;-webkit-font-smoothing:antialiased}
 body.locked{overflow:hidden}
 
-.phone{position:relative;max-width:430px;margin:0 auto;background:var(--mist);min-height:100dvh;overflow:hidden;box-shadow:0 0 60px rgba(0,0,0,.5)}
-section{padding:80px 26px;text-align:center;position:relative}
+.phone{position:relative;max-width:430px;margin:0 auto;background:var(--mist);height:100dvh;overflow:hidden;box-shadow:0 0 60px rgba(0,0,0,.5)}
+section{padding:72px 28px;text-align:center;position:relative}
 h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.1}
 h2{font-size:2.3rem;margin-bottom:18px;color:var(--teal)}
 p{line-height:1.7;font-weight:300;font-size:.98rem}
 .small{font-size:.85rem;letter-spacing:.04em}
 
-/* Basmalah (Arab) */
 .basmalah{font-family:'Amiri','Traditional Arabic',serif;font-size:2.1rem;line-height:1.9;direction:rtl}
 
 /* ===================== COVER ===================== */
 .cover{position:fixed;inset:0;z-index:100;display:flex;justify-content:center}
 .cover .inner{width:100%;max-width:430px;position:relative;height:100dvh;overflow:hidden}
-/* Pintu tanpa garis pinggir emas agar foto tidak terganggu */
-.door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--teal);overflow:hidden;border:0;transition:transform 1.4s cubic-bezier(.77,0,.18,1);z-index:1}
-.door.l{left:0}
-.door.r{right:0}
+.door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--teal);overflow:hidden;transition:transform 1.4s cubic-bezier(.77,0,.18,1);z-index:1}
+.door.l{left:0;border-right:1px solid var(--brass)}
+.door.r{right:0;border-left:1px solid var(--brass)}
 .door .art{position:absolute;top:0;height:100%;width:198%;max-width:none}
 .door.l .art{left:0}
 .door.r .art{right:0}
-
-/* Pintu berupa foto (dari Sheet: "pintu kiri" & "pintu kanan") */
-.door img.pic{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
-.door.has-pic::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(10,26,32,.55),rgba(10,26,32,.1) 40%,rgba(10,26,32,.65))}
-
 .cover-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;color:var(--mist);padding:9dvh 30px 8dvh;text-shadow:0 1px 6px rgba(0,0,0,.6);transition:opacity .6s ease, transform .8s ease}
 .cover-content .to{font-family:var(--serif);font-size:1.7rem;color:var(--brass);margin:6px 0 16px}
 .cover-content h1{font-size:3rem;margin:10px 0 0}
 .btn{font-family:var(--sans);background:transparent;color:var(--mist);border:1px solid var(--brass);padding:13px 30px;border-radius:40px;font-size:.92rem;letter-spacing:.06em;cursor:pointer;transition:background .3s,color .3s}
 .btn:hover:not(:disabled),.btn:focus-visible{background:var(--brass);color:var(--ink);outline:none}
 .btn:disabled{opacity:.55;cursor:wait}
-.btn.fill{background:linear-gradient(135deg,#d9b578,var(--brass));color:var(--ink);border:none;margin-top:6px;box-shadow:0 12px 26px rgba(181,138,74,.4)}
 .cover.open .door.l{transform:translateX(-101%)}
 .cover.open .door.r{transform:translateX(101%)}
 .cover.open .cover-content{opacity:0;transform:scale(1.15);pointer-events:none}
@@ -63,22 +53,51 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 #coverMsg{min-height:1.4em;font-size:.85rem;margin-bottom:14px;color:var(--dust)}
 
 .close-btn{position:fixed;top:14px;left:calc(50% - 215px + 14px);z-index:60;font-size:.75rem;background:rgba(18,48,58,.75);color:var(--mist);border:1px solid var(--brass);border-radius:30px;padding:7px 14px;cursor:pointer;backdrop-filter:blur(6px)}
-.music{position:fixed;bottom:18px;right:calc(50% - 215px + 16px);z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--brass);background:rgba(18,48,58,.8);color:var(--brass);font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px)}
+.music{position:fixed;bottom:calc(var(--nav-h) + 14px + env(safe-area-inset-bottom));right:calc(50% - 215px + 16px);z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--brass);background:rgba(18,48,58,.8);color:var(--brass);font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px)}
 @media (max-width:430px){.close-btn{left:14px}.music{right:16px}}
 .music.playing{animation:spin 6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ===================== HERO & FOTO ===================== */
-.hero{min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;color:var(--mist);padding-bottom:80px;overflow:hidden}
-.hero .bg{position:absolute;inset:0;z-index:0}
-.hero .bg img{width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform}
-.hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,26,32,.92) 5%,rgba(10,26,32,.1) 65%)}
-.hero > *:not(.bg){position:relative;z-index:1}
-.hero h1{font-size:3.6rem;margin:10px 0}
-.amp{font-style:italic;color:var(--brass)}
+/* ===================== MENU BAWAH (gaya menu game) ===================== */
+.menu{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:55;display:flex;
+  height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);
+  background:linear-gradient(to top,rgba(8,20,25,.98),rgba(18,48,58,.94));border-top:1px solid var(--brass);backdrop-filter:blur(8px)}
+.menu[hidden]{display:none}
+.menu button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:0;color:rgba(233,239,240,.6);
+  font-family:var(--sans);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;position:relative;transition:color .25s}
+.menu button i{font-style:normal;font-size:1.25rem;line-height:1}
+.menu button::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:2px;background:var(--brass);transform:scaleX(0);transition:transform .3s}
+.menu button.on{color:var(--brass);text-shadow:0 0 12px rgba(181,138,74,.55)}
+.menu button.on::before{transform:scaleX(1)}
+.menu button.on span::before{content:"▸ ";}
+.menu button:focus-visible{outline:1px solid var(--brass);outline-offset:-4px}
 
-.frame{position:relative;overflow:hidden;border-radius:200px 200px 12px 12px;margin:0 auto 22px;width:78%;aspect-ratio:3/4;background:#2c5560;box-shadow:var(--shadow-soft)}
-.frame.square{border-radius:22px;width:100%;aspect-ratio:4/5;margin:0}
+/* ===================== PANEL ===================== */
+.panel{position:absolute;inset:0;display:none;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.panel.active{display:block;animation:pin .55s ease}
+@keyframes pin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.panel.dark{background:var(--teal);color:var(--mist)}
+
+/* HOME */
+.panel#p-home.active{display:flex;flex-direction:column;justify-content:flex-end;color:var(--mist);overflow:hidden;padding-bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom))}
+#p-home .bg{position:absolute;inset:0;z-index:0}
+#p-home .bg img{width:100%;height:100%;object-fit:cover;filter:blur(3px) saturate(.9);transform:scale(1.08)}
+#p-home .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(8,20,25,.97) 15%,rgba(8,20,25,.55) 60%,rgba(8,20,25,.75))}
+.home-in{position:relative;z-index:1;text-align:center;padding:64px 22px 0}
+.home-in h1{font-size:3rem;margin:6px 0 18px}
+.amp{font-style:italic;color:var(--brass)}
+.duo{display:flex;align-items:center;gap:8px;justify-content:center}
+.char{flex:1;margin:0}
+.char .frame{width:100%;margin:0 0 10px;aspect-ratio:3/4.1;border:1px solid var(--brass);box-shadow:0 0 24px rgba(181,138,74,.25)}
+.char figcaption{font-family:var(--serif);font-size:1.35rem;color:var(--mist)}
+.char figcaption small{display:block;font-family:var(--sans);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:2px}
+.vs{font-family:var(--serif);font-style:italic;font-size:2.2rem;color:var(--brass)}
+.home-date{margin-top:18px;letter-spacing:.08em}
+.press{margin-top:14px;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+
+.frame{position:relative;overflow:hidden;border-radius:200px 200px 12px 12px;margin:0 auto 22px;width:78%;aspect-ratio:3/4;background:#2c5560}
+.frame.square{border-radius:12px;width:100%;aspect-ratio:4/5;margin:0}
 .frame img{width:100%;height:100%;object-fit:cover;display:block;will-change:transform}
 
 /* ===================== ANIMASI SCROLL ===================== */
@@ -97,33 +116,26 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 .parents{font-size:.88rem;opacity:.8}
 .divider{width:1px;height:50px;background:var(--brass);margin:26px auto}
 
-.countdown-card{margin-top:26px;border-radius:28px;padding:26px 8px;background:linear-gradient(160deg,rgba(181,138,74,.22),rgba(255,255,255,.04));border:1px solid rgba(181,138,74,.3);box-shadow:var(--shadow-deep)}
-.countdown{display:grid;grid-template-columns:repeat(4,1fr)}
-.countdown div{padding:6px 4px;position:relative}
-.countdown div:not(:first-child)::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:1px;background:rgba(181,138,74,.35)}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px}
+.countdown div{border:1px solid rgba(181,138,74,.6);border-radius:10px;padding:14px 4px}
 .countdown b{display:block;font-family:var(--serif);font-size:2rem;font-weight:400;color:var(--brass)}
 .countdown span{font-size:.72rem;opacity:.85}
 
-.card{border:1px solid rgba(181,138,74,.3);border-radius:26px;padding:30px 22px;margin-top:22px;background:linear-gradient(160deg,rgba(255,255,255,.65),rgba(255,255,255,.25));box-shadow:var(--shadow-soft)}
+.card{border:1px solid rgba(181,138,74,.7);border-radius:14px;padding:26px 20px;margin-top:22px;background:rgba(255,255,255,.4)}
 .card h3{font-size:1.6rem;color:var(--teal);margin-bottom:8px}
-.link{display:inline-block;margin-top:16px;text-decoration:none;font-size:.85rem;border:1px solid var(--teal);color:var(--teal);padding:10px 22px;border-radius:30px;cursor:pointer;background:rgba(255,255,255,.5);font-family:var(--sans);box-shadow:0 8px 20px rgba(13,31,37,.1)}
-.link:hover{background:var(--teal);color:var(--mist)}
+.link{display:inline-block;margin-top:16px;text-decoration:none;font-size:.85rem;border:1px solid var(--brass);color:var(--brass);padding:10px 22px;border-radius:30px;cursor:pointer;background:transparent;font-family:var(--sans)}
+.link:hover{background:var(--brass);color:var(--ink)}
 
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
 .gallery .frame.wide{grid-column:span 2;aspect-ratio:16/10}
 
-form{display:flex;flex-direction:column;gap:12px;margin-top:20px;text-align:left}
-input,select,textarea{font-family:var(--sans);font-size:.95rem;padding:13px 16px;border-radius:16px;border:1px solid rgba(181,138,74,.7);background:rgba(255,255,255,.08);color:inherit;width:100%}
-input::placeholder,textarea::placeholder{color:rgba(233,239,240,.55)}
-select option{color:#000}
-.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.status{min-height:1.4em;font-size:.88rem;text-align:center;margin-top:10px}
-.status.err{color:var(--dust)}
-.formbox{margin-top:20px;border-radius:24px;overflow:hidden;background:#fff;box-shadow:var(--shadow-soft)}
+/* MAPS & FORM */
+.page-pad{padding:72px 22px 10px;text-align:center}
+.mapbox,.formbox{margin-top:18px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid rgba(181,138,74,.7)}
+.mapbox iframe{display:block;width:100%;height:min(52dvh,420px);border:0}
 .formbox iframe{display:block;width:100%;height:940px;border:0}
-
-
-footer{padding:40px 24px 90px;text-align:center;font-size:.8rem;opacity:.85}
+.addr{margin-top:20px}
+.empty{margin-top:24px;opacity:.8}
 
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important;animation:none!important}
@@ -160,28 +172,23 @@ footer{padding:40px 24px 90px;text-align:center;font-size:.8rem;opacity:.85}
 
 <main class="phone" id="app"></main>
 
+<nav class="menu" id="menu" hidden aria-label="Menu utama">
+  <button data-go="home" class="on"><i>⌂</i><span>Home</span></button>
+  <button data-go="isi"><i>✉</i><span>Isi</span></button>
+  <button data-go="maps"><i>⚑</i><span>Maps</span></button>
+  <button data-go="rsvp"><i>✔</i><span>Kehadiran</span></button>
+</nav>
+
 <script>
 /* ============================================================
  *  PENGATURAN
- *  SHEET_ID : ID Google Sheet "Main data" (bagian antara /d/ dan /edit pada linknya).
- *             Sheet harus dibagikan sebagai "Anyone with the link" -> Viewer.
- *             Jika dikosongkan, halaman memakai DATA CONTOH (mode pratinjau).
- *  MUSIK    : lagu bawaan (file di repo, satu folder dengan index.html).
- *             Jika baris "musik" di Sheet diisi, isi Sheet yang dipakai.
- *  FORM_EMBED : link Google Form berakhiran ?embedded=true, dipasang sebagai iframe.
- *               Jika terisi, ini yang dipakai dan FORM_URL + ENTRY di bawah diabaikan.
- *  FORM_URL + ENTRY : cara lain (formulir buatan sendiri, butuh kode entry.xxxx). Kosong = tidak dipakai.
- *
- *  Baris opsional di Sheet (kolom A = nama, kolom B = isi, letakkan SEBELUM baris "Foto"):
- *  pintu kiri, pintu kanan (link foto Drive untuk pintu sampul), jam, lokasi,
- *  panggilan pria, panggilan wanita, musik, teks pembuka, teks penutup
+ *  SHEET_ID   : ID Google Sheet "Main data" (dibagikan "Anyone with the link" -> Viewer).
+ *               Kosong = memakai DATA CONTOH (pratinjau).
+ *  FORM_EMBED : link Google Form berakhiran ?embedded=true (dipasang sebagai iframe).
  * ============================================================ */
 const CFG = {
   SHEET_ID: '1mlQuMGj7E0pxA05UiB6kdYu6JpViPhZTZVmtA_xDQ4E',
-  MUSIK: 'janji-suci.mp3',   // ganti nama file ini bila nama lagu di repo berbeda
-  FORM_EMBED: 'https://docs.google.com/forms/d/e/1FAIpQLSe8KD3lZavdS15ANV28F3Gzf40vvwGsJDZEAcCzYHn97ZQzVw/viewform?embedded=true',
-  FORM_URL: '',   // contoh: 'https://docs.google.com/forms/d/e/1FAIpQLS.../formResponse'
-  ENTRY: { nama: '', alamat: '', kehadiran: '' }   // contoh: 'entry.123456789'
+  FORM_EMBED: 'https://docs.google.com/forms/d/e/1FAIpQLSe8KD3lZavdS15ANV28F3Gzf40vvwGsJDZEAcCzYHn97ZQzVw/viewform?embedded=true'
 };
 
 /* Data contoh untuk pratinjau tanpa Google Sheet */
@@ -193,7 +200,7 @@ const DEMO = {
     link_alamat:'https://maps.google.com/?q=Malang',
     tanggal:'12 Desember 2026', jam:'09.00 WIB'
   },
-  // no 1 = sampul, 2 = pria, 3 = wanita, 4 dst = galeri (link kosong = gambar pengganti)
+  // no 1 = sampul/latar, 2 = pria, 3 = wanita, 4 dst = galeri
   foto:[{no:4,link:'demo-1'},{no:5,link:'demo-2'},{no:6,link:'demo-3'}]
 };
 
@@ -201,7 +208,6 @@ const DEMO = {
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// Ambil ID file dari berbagai bentuk link Google Drive
 const driveId = u => { const m = String(u || '').match(/(?:\/d\/|[?&]id=)([\w-]{20,})/); return m ? m[1] : null; };
 const imgUrl = u => { if (!u) return ''; const id = driveId(u); return id ? `https://lh3.googleusercontent.com/d/${id}=w1200` : u; };
 const audioUrl = u => { const id = driveId(u); return id ? `https://drive.google.com/uc?export=download&id=${id}` : (u || ''); };
@@ -216,7 +222,6 @@ function photo(url, alt, scrub, lazy = true, cls = '') {
          `${scrub ? ` data-scrub="${scrub}"` : ''}${lazy ? ' loading="lazy"' : ''}>`;
 }
 
-// Foto gagal dimuat: coba alamat cadangan Drive, lalu gambar pengganti
 document.addEventListener('error', e => {
   const img = e.target;
   if (img.tagName !== 'IMG' || img.dataset.ph) return;
@@ -231,7 +236,6 @@ const BULAN = ['januari','februari','maret','april','mei','juni','juli','agustus
 const HARI  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 
-// Menerima "19 Mei 2026" atau "2026-05-19". Jam (opsional) "09.00" atau "09:00", dianggap WIB (+07:00).
 function parseTanggal(s, jam) {
   s = String(s || '').trim();
   if (!s) return null;
@@ -254,26 +258,24 @@ function parseTanggal(s, jam) {
     label: `${hari}, ${d} ${cap(BULAN[mo])} ${y}`
   };
 }
-// Huruf awal tiap kata dibuat kapital: "agis salwa" -> "Agis Salwa"
 const title = s => String(s || '').trim().replace(/(^|[\s'-])(\p{L})/gu, (_, a, b) => a + b.toUpperCase());
-/* ===== /TANGGAL ===== */
 
-/* Kirim konfirmasi ke Google Form (tanpa server / Apps Script) */
-async function api(payload) {
-  if (payload.website) return { ok: true };                 // kolom jebakan bot terisi
-  if (!CFG.SHEET_ID) { await new Promise(r => setTimeout(r, 600)); return { ok: true }; }   // pratinjau
-  if (!CFG.FORM_URL) throw new Error('FORM_URL belum diisi');
-  const body = new URLSearchParams();
-  body.set(CFG.ENTRY.nama, payload.nama);
-  body.set(CFG.ENTRY.alamat, payload.alamat);
-  body.set(CFG.ENTRY.kehadiran, payload.kehadiran);
-  // no-cors: respons Google Form tidak bisa dibaca, jadi dianggap berhasil bila tidak ada error jaringan
-  await fetch(CFG.FORM_URL, { method: 'POST', mode: 'no-cors', body });
-  return { ok: true };
+/* ===================== PETA (embed Google Maps tanpa API key) ===================== */
+// Prioritas: koordinat (@lat,lng) di link -> parameter q= di link -> teks lokasi + alamat dari Sheet.
+// Catatan: link pendek (maps.app.goo.gl) tidak bisa dibaca, jadi dipakai teks alamat.
+function mapSrc(m) {
+  const l = String(m.link_alamat || '');
+  let q = '', a = l.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (a) q = a[1] + ',' + a[2];
+  else {
+    a = l.match(/[?&](?:q|query)=([^&]+)/);
+    if (a) { try { q = decodeURIComponent(a[1].replace(/\+/g, ' ')); } catch (e) {} }
+  }
+  if (!q) q = [m.lokasi, m.alamat].filter(Boolean).join(', ');
+  return q ? `https://www.google.com/maps?q=${encodeURIComponent(q)}&output=embed` : '';
 }
 
 /* ===================== BACA GOOGLE SHEET LANGSUNG ===================== */
-// Memakai endpoint "gviz" milik Google lewat tag <script> (tidak kena batasan CORS).
 function loadSheet(id) {
   return new Promise((resolve, reject) => {
     const cb = 'gviz_' + Math.random().toString(36).slice(2);
@@ -297,10 +299,6 @@ function loadSheet(id) {
 
 const tableToRows = t => (t.rows || []).map(r => (r.c || []).map(c => c ? (c.f != null ? c.f : (c.v != null ? c.v : '')) : ''));
 
-/* Layout "Main data":
- *   sebelum baris "Foto": kolom A = nama isian, kolom B = nilai ("Nama Pria" -> nama_pria)
- *   setelah baris "Foto" (dan baris judul no | link): kolom B = link foto,
- *   nomor foto diambil dari kolom A, atau dari urutan barisnya bila kosong. */
 function parseMain(rows) {
   const main = {}, foto = [];
   let inFoto = false, urut = 0;
@@ -311,7 +309,7 @@ function parseMain(rows) {
       if (key === 'foto') { inFoto = true; return; }
       if (key && b) main[key.replace(/ /g, '_')] = b;
     } else {
-      if (key === 'no') return;                 // baris judul
+      if (key === 'no') return;
       urut++;
       if (b) foto.push({ no: Number(a) > 0 ? Number(a) : urut, link: b });
     }
@@ -321,12 +319,11 @@ function parseMain(rows) {
 }
 
 /* ===================== RENDER HALAMAN ===================== */
-
 function render(data, to) {
   const m = data.main || {};
   const fotos = data.foto || [];
-  const foto = n => (fotos.find(f => f.no === n) || {}).link || '';   // 1 sampul, 2 pria, 3 wanita
-  const galeriFoto = fotos.filter(f => f.no >= 4 && f.link);            // 4 dst = galeri
+  const foto = n => (fotos.find(f => f.no === n) || {}).link || '';
+  const galeriFoto = fotos.filter(f => f.no >= 4 && f.link);
 
   const namaPria = title(m.nama_pria), namaWanita = title(m.nama_wanita);
   const pgPria = title(m.panggilan_pria) || namaPria.split(' ')[0] || '';
@@ -340,26 +337,17 @@ function render(data, to) {
 
   const tgl = parseTanggal(m.tanggal, m.jam);
   const tanggalTampil = tgl ? tgl.label : (m.tanggal || '');
-  const showCountdown = !!(tgl && tgl.date > new Date());   // disembunyikan jika tanggal sudah lewat
+  const showCountdown = !!(tgl && tgl.date > new Date());
   const pembuka = m.teks_pembuka || 'Dengan memohon rahmat Tuhan Yang Maha Esa, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberi doa restu di hari pernikahan kami.';
   const penutup = m.teks_penutup || 'Terima kasih atas doa dan kehadiran Anda.';
-  const namaVal = esc(to || '');
   const formEmbed = /^https:\/\/docs\.google\.com\/forms\//.test(CFG.FORM_EMBED || '') ? CFG.FORM_EMBED : '';
-  const rsvpAktif = !CFG.SHEET_ID || !!CFG.FORM_URL;   // pratinjau atau Form sudah diisi
+  const peta = mapSrc(m);
+  const linkMaps = /^https?:\/\//.test(m.link_alamat || '') ? m.link_alamat : '';
 
   document.title = `Undangan Pernikahan ${pgPria} & ${pgWanita}`;
   $('coverNames').innerHTML = `${esc(pgPria)} &amp; ${esc(pgWanita)}`;
   $('guestName').textContent = to || 'Tamu Undangan';
-  // Lagu: isi Sheet ("musik") diprioritaskan, bila kosong pakai lagu bawaan di repo
-  const lagu = m.musik ? audioUrl(m.musik) : CFG.MUSIK;
-  if (lagu) $('bgm').src = lagu;
-
-  // Pintu sampul: foto dari Sheet ("pintu kiri" / "pintu kanan"); bila kosong, pakai motif kawung + gunungan
-  const pintu = [m.pintu_kiri, m.pintu_kanan];
-  document.querySelectorAll('.door').forEach((d, i) => {
-    d.classList.toggle('has-pic', !!pintu[i]);
-    d.innerHTML = pintu[i] ? photo(pintu[i], '', '', false, 'pic') : ART(i);
-  });
+  if (m.musik) $('bgm').src = audioUrl(m.musik);
 
   const galeri = galeriFoto.map((g, i) => `
     <figure class="${i % 3 === 2 ? 'wide ' : ''}frame square" data-anim="${i % 2 ? 'zoom-out' : 'zoom-in'}" style="--d:${(i % 2) * .15}s">
@@ -367,105 +355,116 @@ function render(data, to) {
     </figure>`).join('');
 
   $('app').innerHTML = `
-  <section class="hero">
-    <div class="bg">${photo(foto(1), 'Foto sampul', 'out', false)}</div>
-    <p class="small" data-anim="fade-up" style="font-family:var(--serif);font-style:italic;font-size:1.3rem;letter-spacing:.12em">Our Wedding</p>
-    <h1 data-anim="zoom-out" style="--d:.15s">${esc(pgPria)} <span class="amp">&amp;</span> ${esc(pgWanita)}</h1>
-    <p data-anim="fade-up" style="--d:.3s">${esc(tanggalTampil)}</p>
+  <!-- 1. HOME -->
+  <section class="panel active" id="p-home" data-panel="home">
+    <div class="bg">${photo(foto(1) || foto(2), '', '', false)}</div>
+    <div class="home-in">
+      <p class="small" style="letter-spacing:.3em">THE WEDDING OF</p>
+      <h1>${esc(pgPria)} <span class="amp">&amp;</span> ${esc(pgWanita)}</h1>
+      <div class="duo">
+        <figure class="char">
+          <div class="frame">${photo(foto(2), pgPria, '', false)}</div>
+          <figcaption><small>Mempelai Pria</small>${esc(pgPria)}</figcaption>
+        </figure>
+        <span class="vs">&amp;</span>
+        <figure class="char">
+          <div class="frame">${photo(foto(3), pgWanita, '', false)}</div>
+          <figcaption><small>Mempelai Wanita</small>${esc(pgWanita)}</figcaption>
+        </figure>
+      </div>
+      <p class="home-date">${esc(tanggalTampil)}</p>
+      <p class="press">▾ Pilih menu di bawah ▾</p>
+    </div>
   </section>
 
-  <section>
-    <h2 class="basmalah" lang="ar" dir="rtl" data-anim="fade-up">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
-    <p data-anim="fade-up">${esc(pembuka)}</p>
-    <div style="margin-top:40px">
-      <div class="frame" data-anim="zoom-in">${photo(foto(2), pgPria, 'in')}</div>
-      <h3 class="names" data-anim="slide-left">${esc(namaPria)}</h3>
-      <p class="parents" data-anim="slide-left" style="--d:.1s">${esc(ortu(m.bapak_pria, m.ibu_pria, 'Putra'))}</p>
-    </div>
-    <div class="divider"></div>
-    <div>
-      <div class="frame" data-anim="zoom-in">${photo(foto(3), pgWanita, 'in')}</div>
-      <h3 class="names" data-anim="slide-right">${esc(namaWanita)}</h3>
-      <p class="parents" data-anim="slide-right" style="--d:.1s">${esc(ortu(m.bapak_wanita, m.ibu_wanita, 'Putri'))}</p>
-    </div>
-  </section>
+  <!-- 2. ISI -->
+  <div class="panel" id="p-isi" data-panel="isi">
+    <section>
+      <h2 class="basmalah" lang="ar" dir="rtl" data-anim="fade-up">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
+      <p data-anim="fade-up">${esc(pembuka)}</p>
+      <div style="margin-top:40px">
+        <div class="frame" data-anim="zoom-in">${photo(foto(2), pgPria, 'in')}</div>
+        <h3 class="names" data-anim="slide-left">${esc(namaPria)}</h3>
+        <p class="parents" data-anim="slide-left" style="--d:.1s">${esc(ortu(m.bapak_pria, m.ibu_pria, 'Putra'))}</p>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="frame" data-anim="zoom-in">${photo(foto(3), pgWanita, 'in')}</div>
+        <h3 class="names" data-anim="slide-right">${esc(namaWanita)}</h3>
+        <p class="parents" data-anim="slide-right" style="--d:.1s">${esc(ortu(m.bapak_wanita, m.ibu_wanita, 'Putri'))}</p>
+      </div>
+    </section>
 
-  ${showCountdown ? `
-  <section class="dark">
-    <h2 data-anim="fade-up">Menuju Hari Bahagia</h2>
-    <div class="countdown-card" data-anim="zoom-in">
-      <div class="countdown">
+    ${showCountdown ? `
+    <section class="dark">
+      <h2 data-anim="fade-up">Menuju Hari Bahagia</h2>
+      <div class="countdown" data-anim="zoom-in">
         <div><b id="cd-d">0</b><span>Hari</span></div>
         <div><b id="cd-h">0</b><span>Jam</span></div>
         <div><b id="cd-m">0</b><span>Menit</span></div>
         <div><b id="cd-s">0</b><span>Detik</span></div>
       </div>
+    </section>` : ''}
+
+    <section>
+      <h2 data-anim="fade-up">Acara</h2>
+      <div class="card" data-anim="zoom-in">
+        <h3>Hari &amp; Tanggal</h3>
+        <p>${esc(tanggalTampil)}${m.jam ? `<br>${esc(m.jam)}` : ''}</p>
+      </div>
+      <p data-anim="fade-up" style="margin-top:22px;opacity:.8">Lokasi acara dapat dilihat di menu <b>Maps</b>.</p>
+    </section>
+
+    ${galeri ? `<section class="dark"><h2 data-anim="fade-up">Galeri</h2><div class="gallery">${galeri}</div></section>` : ''}
+
+    <section class="dark" style="padding-top:20px">
+      <p data-anim="fade-up">${esc(penutup)}</p>
+      <p data-anim="fade-up" style="margin-top:8px;font-family:var(--serif);font-size:1.5rem;color:var(--brass)">${esc(pgPria)} &amp; ${esc(pgWanita)}</p>
+    </section>
+  </div>
+
+  <!-- 3. MAPS -->
+  <div class="panel dark" id="p-maps" data-panel="maps">
+    <div class="page-pad">
+      <h2>Lokasi</h2>
+      ${peta ? `<div class="mapbox"><iframe data-src="${esc(peta)}" title="Peta lokasi acara" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>` : '<p class="empty">Lokasi belum tersedia.</p>'}
+      <p class="addr">${m.lokasi ? `<b style="font-weight:500">${esc(m.lokasi)}</b><br>` : ''}${esc(m.alamat)}</p>
+      ${linkMaps ? `<a class="link" href="${esc(linkMaps)}" target="_blank" rel="noopener">Buka di Google Maps</a>` : ''}
     </div>
-  </section>` : ''}
+  </div>
 
-  <section>
-    <h2 data-anim="fade-up">Acara</h2>
-    <div class="card" data-anim="zoom-in">
-      <h3>Hari &amp; Tanggal</h3>
-      <p>${esc(tanggalTampil)}${m.jam ? `<br>${esc(m.jam)}` : ''}</p>
+  <!-- 4. KEHADIRAN -->
+  <div class="panel dark" id="p-rsvp" data-panel="rsvp">
+    <div class="page-pad">
+      <h2>Konfirmasi Kehadiran</h2>
+      ${formEmbed ? `<div class="formbox"><iframe data-src="${esc(formEmbed)}" title="Formulir konfirmasi kehadiran">Memuat…</iframe></div>` : '<p class="empty">Konfirmasi kehadiran segera tersedia.</p>'}
     </div>
-    <div data-anim="fade-up">
-      <p style="margin-top:22px">${m.lokasi ? `${esc(m.lokasi)}<br>` : ''}${esc(m.alamat)}</p>
-      ${/^https?:\/\//.test(m.link_alamat || '') ? `<a class="link" href="${esc(m.link_alamat)}" target="_blank" rel="noopener">Buka Google Maps</a>` : ''}
-    </div>
-  </section>
+  </div>`;
 
-  ${galeri ? `<section class="dark"><h2 data-anim="fade-up">Galeri</h2><div class="gallery">${galeri}</div></section>` : ''}
-
-  <section class="dark">
-    <h2 data-anim="fade-up">Konfirmasi Kehadiran</h2>
-    ${formEmbed ? `<div class="formbox" data-anim="fade-up"><iframe src="${esc(formEmbed)}" title="Formulir konfirmasi kehadiran" loading="lazy">Memuat…</iframe></div>` : rsvpAktif ? `
-    <form id="rsvpForm" data-anim="fade-up">
-      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <input name="nama" placeholder="Nama Anda" value="${namaVal}" maxlength="80" required>
-      <input name="alamat" placeholder="Alamat" maxlength="150" required>
-      <select name="kehadiran" id="selHadir"><option>Hadir</option><option>Tidak hadir</option></select>
-      <button class="btn fill" type="submit">Kirim</button>
-      <div class="status" id="rsvpStatus" role="status"></div>
-    </form>
-    ` : '<p data-anim="fade-up">Konfirmasi kehadiran segera tersedia.</p>'}
-  </section>
-
-  <footer class="dark">
-    <p>${esc(penutup)}</p>
-    <p style="margin-top:8px">${esc(pgPria)} &amp; ${esc(pgWanita)}</p>
-  </footer>`;
-
-  bindForms();
   if (showCountdown) startCountdown(tgl.date);
   initAnimations();
+  go('home');
 }
 
-/* ===================== FORMULIR ===================== */
-function bindForms() {
-  const rsvp = $('rsvpForm');
-  if (rsvp) rsvp.addEventListener('submit', e =>
-    submit(e, 'rsvp', $('rsvpStatus'), 'Terima kasih, konfirmasi Anda sudah kami terima.'));
+/* ===================== NAVIGASI MENU ===================== */
+const menu = $('menu');
+function go(name) {
+  document.querySelectorAll('.panel').forEach(p => {
+    const on = p.dataset.panel === name;
+    p.classList.toggle('active', on);
+    if (on) {
+      p.scrollTop = 0;
+      // iframe baru dimuat saat panelnya pertama dibuka (hemat kuota)
+      p.querySelectorAll('iframe[data-src]').forEach(f => { f.src = f.dataset.src; f.removeAttribute('data-src'); });
+    }
+  });
+  menu.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.go === name));
+  requestAnimationFrame(scrub);
 }
-
-async function submit(e, type, statusEl, okMsg, after) {
-  e.preventDefault();
-  const f = e.target, btn = f.querySelector('button[type=submit]');
-  const payload = { type };
-  new FormData(f).forEach((v, k) => payload[k] = v);
-  btn.disabled = true; statusEl.className = 'status'; statusEl.textContent = 'Mengirim…';
-  try {
-    const r = await api(payload);
-    if (!r.ok) throw new Error(r.error || 'Gagal menyimpan');
-    statusEl.textContent = okMsg;
-    if (after) after(f);
-    f.reset();
-  } catch (err) {
-    statusEl.className = 'status err';
-    statusEl.textContent = 'Belum terkirim. Periksa koneksi lalu coba lagi.';
-    console.error(err);
-  } finally { btn.disabled = false; }
-}
+menu.addEventListener('click', e => {
+  const b = e.target.closest('button[data-go]');
+  if (b) go(b.dataset.go);
+});
 
 /* ===================== HITUNG MUNDUR ===================== */
 let cdTimer;
@@ -495,14 +494,15 @@ function scrub() {
   const vh = innerHeight;
   scrubImgs.forEach(img => {
     const r = img.parentElement.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > vh) return;
+    if (r.width === 0 || r.bottom < 0 || r.top > vh) return;
     const p = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
     const s = img.dataset.scrub === 'in' ? 1 + p * 0.25 : 1.25 - p * 0.25;
     img.style.transform = `scale(${s.toFixed(3)})`;
   });
   ticking = false;
 }
-addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(scrub); } }, { passive: true });
+// scroll terjadi di dalam panel (tidak menggelembung), jadi didengar lewat capture
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(scrub); } }, { passive: true, capture: true });
 addEventListener('resize', scrub);
 
 /* ===================== BUKA / TUTUP & MUSIK ===================== */
@@ -513,27 +513,30 @@ openBtn.addEventListener('click', () => {
   cover.classList.add('open');
   document.body.classList.remove('locked');
   closeBtn.hidden = false;
+  menu.hidden = false;
+  go('home');
   if (bgm.getAttribute('src')) {
     musicBtn.hidden = false;
     bgm.play().then(() => musicBtn.classList.add('playing')).catch(() => {});
   }
-  scrollTo(0, 0);
   setTimeout(() => cover.classList.add('gone'), 1500);
 });
 closeBtn.addEventListener('click', () => {
-  scrollTo({ top: 0 });
   cover.classList.remove('gone');
   requestAnimationFrame(() => cover.classList.remove('open'));
   document.body.classList.add('locked');
   closeBtn.hidden = true;
+  menu.hidden = true;
+  musicBtn.hidden = true;
+  bgm.pause(); musicBtn.classList.remove('playing');
+  go('home');
 });
 musicBtn.addEventListener('click', () => {
   if (bgm.paused) { bgm.play(); musicBtn.classList.add('playing'); }
   else { bgm.pause(); musicBtn.classList.remove('playing'); }
 });
 
-/* ===================== GAMBAR PINTU CADANGAN (motif kawung + gunungan wayang) ===================== */
-/* Dipakai hanya bila "pintu kiri" / "pintu kanan" di Sheet kosong. */
+/* ===================== GAMBAR PINTU (motif kawung + gunungan wayang) ===================== */
 const GUN = 'M200 240C222 285 262 335 284 420C298 480 296 560 288 620L112 620C104 560 102 480 116 420C138 335 178 285 200 240Z';
 const ART = i => `<svg class="art" viewBox="0 0 400 860" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
 <defs>
@@ -567,8 +570,9 @@ const ART = i => `<svg class="art" viewBox="0 0 400 860" preserveAspectRatio="xM
   <use href="#br${i}" transform="translate(400 0) scale(-1 1)"/>
 </g>
 </svg>`;
+document.querySelectorAll('.door').forEach((d, i) => d.innerHTML = ART(i));
 
-/* ===================== MULAI: ambil data dari Google Sheet ===================== */
+/* ===================== MULAI ===================== */
 async function boot() {
   const to = (new URLSearchParams(location.search).get('to') || '').trim();
   try {
