@@ -40,6 +40,9 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 .door.l{left:0}
 .door.r{right:0}
 .door .art{position:absolute;top:0;height:100%;width:100cqw;max-width:none;display:block}
+/* Foto pintu dari Sheet ("pintu kiri" / "pintu kanan"); gambar bawaan dipakai bila kosong/gagal dimuat */
+.door .dphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.door.photo::after{content:"";position:absolute;inset:0;background:rgba(8,20,25,.38)}
 .door.l .art{left:0}
 .door.r .art{right:0}
 .cover-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;color:var(--mist);padding:9dvh 30px 8dvh;text-shadow:0 1px 6px rgba(0,0,0,.6);transition:opacity .6s ease, transform .8s ease}
@@ -54,9 +57,8 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 .cover.gone{display:none}
 #coverMsg{min-height:1.4em;font-size:.85rem;margin-bottom:14px;color:var(--dust)}
 
-.close-btn{position:fixed;top:14px;left:calc(50% - 215px + 14px);z-index:60;font-size:.75rem;background:rgba(18,48,58,.75);color:var(--mist);border:1px solid var(--brass);border-radius:30px;padding:7px 14px;cursor:pointer;backdrop-filter:blur(6px)}
 .music{position:fixed;bottom:calc(var(--nav-h) + 14px + env(safe-area-inset-bottom));right:calc(50% - 215px + 16px);z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--brass);background:rgba(18,48,58,.8);color:var(--brass);font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px)}
-@media (max-width:430px){.close-btn{left:14px}.music{right:16px}}
+@media (max-width:430px){.music{right:16px}}
 .music.playing{animation:spin 6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -66,7 +68,8 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
   background:linear-gradient(to top,rgba(8,20,25,.98),rgba(18,48,58,.94));border-top:1px solid var(--brass);backdrop-filter:blur(8px)}
 .menu[hidden]{display:none}
 .menu button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:0;color:rgba(233,239,240,.6);
-  font-family:var(--sans);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;position:relative;transition:color .25s}
+  font-family:var(--sans);font-size:.64rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;position:relative;transition:color .25s}
+.menu #closeBtn{color:var(--dust);border-left:1px solid rgba(181,138,74,.35)}
 .menu button i{font-style:normal;font-size:1.25rem;line-height:1}
 .menu button::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:2px;background:var(--brass);transform:scaleX(0);transition:transform .3s}
 .menu button.on{color:var(--brass);text-shadow:0 0 12px rgba(181,138,74,.55)}
@@ -168,7 +171,6 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
   </div>
 </div>
 
-<button class="close-btn" id="closeBtn" hidden>Tutup undangan</button>
 <button class="music" id="musicBtn" hidden aria-label="Putar atau jeda musik">♪</button>
 <audio id="bgm" loop preload="none"></audio>
 
@@ -178,7 +180,8 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
   <button data-go="home" class="on"><i>⌂</i><span>Home</span></button>
   <button data-go="isi"><i>✉</i><span>Isi</span></button>
   <button data-go="maps"><i>⚑</i><span>Maps</span></button>
-  <button data-go="rsvp"><i>✔</i><span>Kehadiran</span></button>
+  <button data-go="rsvp"><i>✔</i><span>Hadir</span></button>
+  <button id="closeBtn" aria-label="Tutup undangan"><i>✕</i><span>Tutup</span></button>
 </nav>
 
 <script>
@@ -320,6 +323,28 @@ function parseMain(rows) {
   return { main, foto };
 }
 
+/* ===================== FOTO PINTU DARI SHEET ===================== */
+// Gambar bawaan (motif kawung) tetap tampil sampai foto berhasil dimuat; jika gagal, tetap memakai bawaan.
+function setDoor(sel, url) {
+  const door = document.querySelector(sel);
+  if (!door || !url) return;
+  const id = driveId(url);
+  const tries = [imgUrl(url)];
+  if (id) tries.push(`https://drive.google.com/thumbnail?id=${id}&sz=w1200`);
+  const attempt = () => {
+    const src = tries.shift();
+    if (!src) return;
+    const im = new Image();
+    im.className = 'dphoto';
+    im.alt = '';
+    im.referrerPolicy = 'no-referrer';
+    im.onload = () => { door.innerHTML = ''; door.appendChild(im); door.classList.add('photo'); };
+    im.onerror = attempt;
+    im.src = src;
+  };
+  attempt();
+}
+
 /* ===================== RENDER HALAMAN ===================== */
 function render(data, to) {
   const m = data.main || {};
@@ -350,6 +375,8 @@ function render(data, to) {
   $('coverNames').innerHTML = `${esc(pgPria)} &amp; ${esc(pgWanita)}`;
   $('guestName').textContent = to || 'Tamu Undangan';
   if (m.musik) $('bgm').src = audioUrl(m.musik);
+  setDoor('.door.l', m.pintu_kiri);
+  setDoor('.door.r', m.pintu_kanan);
 
   const galeri = galeriFoto.map((g, i) => `
     <figure class="${i % 3 === 2 ? 'wide ' : ''}frame square" data-anim="${i % 2 ? 'zoom-out' : 'zoom-in'}" style="--d:${(i % 2) * .15}s">
@@ -503,7 +530,6 @@ openBtn.addEventListener('click', () => {
   if (openBtn.dataset.reload) return location.reload();
   cover.classList.add('open');
   document.body.classList.remove('locked');
-  closeBtn.hidden = false;
   menu.hidden = false;
   go('home');
   if (bgm.getAttribute('src')) {
@@ -516,7 +542,6 @@ closeBtn.addEventListener('click', () => {
   cover.classList.remove('gone');
   requestAnimationFrame(() => cover.classList.remove('open'));
   document.body.classList.add('locked');
-  closeBtn.hidden = true;
   menu.hidden = true;
   musicBtn.hidden = true;
   bgm.pause(); musicBtn.classList.remove('playing');
