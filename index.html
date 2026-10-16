@@ -33,11 +33,13 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 
 /* ===================== COVER ===================== */
 .cover{position:fixed;inset:0;z-index:100;display:flex;justify-content:center}
-.cover .inner{width:100%;max-width:430px;position:relative;height:100dvh;overflow:hidden}
-.door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--teal);overflow:hidden;transition:transform 1.4s cubic-bezier(.77,0,.18,1);z-index:1}
-.door.l{left:0;border-right:1px solid var(--brass)}
-.door.r{right:0;border-left:1px solid var(--brass)}
-.door .art{position:absolute;top:0;height:100%;width:198%;max-width:none}
+.cover .inner{width:100%;max-width:430px;position:relative;height:100dvh;overflow:hidden;container-type:inline-size}
+/* Dua pintu = satu gambar utuh yang dibelah dua. Lebar gambar = lebar sampul (100cqw),
+   pintu sedikit tumpang tindih (+1px) agar tidak ada celah/garis di tengah. */
+.door{position:absolute;top:0;bottom:0;width:calc(50% + .5px);background:var(--teal);overflow:hidden;transition:transform 1.4s cubic-bezier(.77,0,.18,1);z-index:1}
+.door.l{left:0}
+.door.r{right:0}
+.door .art{position:absolute;top:0;height:100%;width:100cqw;max-width:none;display:block}
 .door.l .art{left:0}
 .door.r .art{right:0}
 .cover-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;color:var(--mist);padding:9dvh 30px 8dvh;text-shadow:0 1px 6px rgba(0,0,0,.6);transition:opacity .6s ease, transform .8s ease}
@@ -81,8 +83,8 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 /* HOME */
 .panel#p-home.active{display:flex;flex-direction:column;justify-content:flex-end;color:var(--mist);overflow:hidden;padding-bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom))}
 #p-home .bg{position:absolute;inset:0;z-index:0}
-#p-home .bg img{width:100%;height:100%;object-fit:cover;filter:blur(3px) saturate(.9);transform:scale(1.08)}
-#p-home .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(8,20,25,.97) 15%,rgba(8,20,25,.55) 60%,rgba(8,20,25,.75))}
+#p-home .bg img{width:100%;height:100%;object-fit:cover}
+#p-home .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(8,20,25,.92) 8%,rgba(8,20,25,.15) 55%,rgba(8,20,25,.35))}
 .home-in{position:relative;z-index:1;text-align:center;padding:64px 22px 0}
 .home-in h1{font-size:3rem;margin:6px 0 18px}
 .amp{font-style:italic;color:var(--brass)}
@@ -357,21 +359,10 @@ function render(data, to) {
   $('app').innerHTML = `
   <!-- 1. HOME -->
   <section class="panel active" id="p-home" data-panel="home">
-    <div class="bg">${photo(foto(1) || foto(2), '', '', false)}</div>
+    <div class="bg">${photo(foto(1), 'Foto sampul', '', false)}</div>
     <div class="home-in">
       <p class="small" style="letter-spacing:.3em">THE WEDDING OF</p>
       <h1>${esc(pgPria)} <span class="amp">&amp;</span> ${esc(pgWanita)}</h1>
-      <div class="duo">
-        <figure class="char">
-          <div class="frame">${photo(foto(2), pgPria, '', false)}</div>
-          <figcaption><small>Mempelai Pria</small>${esc(pgPria)}</figcaption>
-        </figure>
-        <span class="vs">&amp;</span>
-        <figure class="char">
-          <div class="frame">${photo(foto(3), pgWanita, '', false)}</div>
-          <figcaption><small>Mempelai Wanita</small>${esc(pgWanita)}</figcaption>
-        </figure>
-      </div>
       <p class="home-date">${esc(tanggalTampil)}</p>
       <p class="press">▾ Pilih menu di bawah ▾</p>
     </div>
