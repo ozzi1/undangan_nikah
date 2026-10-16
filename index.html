@@ -15,7 +15,7 @@
   --teal:#12303a; --mist:#e9eff0; --brass:#b58a4a; --dust:#c98f8f; --ink:#0d1f25;
   --serif:'Cormorant Garamond', Georgia, serif;
   --sans:'Jost', system-ui, sans-serif;
-  --nav-h:72px;
+  --nav-h:72px; --eq-h:36px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -57,10 +57,13 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 .cover.gone{display:none}
 #coverMsg{min-height:1.4em;font-size:.85rem;margin-bottom:14px;color:var(--dust)}
 
-.music{position:fixed;bottom:calc(var(--nav-h) + 14px + env(safe-area-inset-bottom));right:calc(50% - 215px + 16px);z-index:60;width:44px;height:44px;border-radius:50%;border:1px solid var(--brass);background:rgba(18,48,58,.8);color:var(--brass);font-size:1.1rem;cursor:pointer;backdrop-filter:blur(6px)}
-@media (max-width:430px){.music{right:16px}}
-.music.playing{animation:spin 6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ===================== EQUALIZER (di atas menu bawah) ===================== */
+.eq{position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--eq-h);z-index:54;
+  display:flex;align-items:flex-end;gap:10px;padding:0 16px 5px;background:linear-gradient(to top,rgba(8,20,25,.6),rgba(8,20,25,0));border:0;cursor:pointer;color:var(--brass)}
+.eq[hidden]{display:none}
+.eq-ico{font-size:.62rem;width:14px;line-height:22px;text-align:center;flex:none}
+.eq-bars{flex:1;display:flex;align-items:flex-end;gap:3px;height:22px}
+.eq-bars i{flex:1;height:22px;background:var(--brass);border-radius:2px 2px 0 0;opacity:.9;transform-origin:50% 100%;transform:scaleY(.12);will-change:transform}
 
 /* ===================== MENU BAWAH (gaya menu game) ===================== */
 .menu{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:55;display:flex;
@@ -78,13 +81,13 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
 .menu button:focus-visible{outline:1px solid var(--brass);outline-offset:-4px}
 
 /* ===================== PANEL ===================== */
-.panel{position:absolute;inset:0;z-index:1;color:var(--mist);display:none;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.panel{position:absolute;inset:0;z-index:1;color:var(--mist);display:none;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + var(--eq-h) + 24px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
 .panel.active{display:block;animation:pin .55s ease}
 @keyframes pin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 .panel.dark{background:transparent}
 
 /* HOME */
-.panel#p-home.active{display:flex;flex-direction:column;justify-content:flex-end;color:var(--mist);overflow:hidden;padding-bottom:calc(var(--nav-h) + 18px + env(safe-area-inset-bottom))}
+.panel#p-home.active{display:flex;flex-direction:column;justify-content:flex-end;color:var(--mist);overflow:hidden;padding-bottom:calc(var(--nav-h) + var(--eq-h) + 18px + env(safe-area-inset-bottom))}
 #slides{position:absolute;inset:0;z-index:0;background:#0a1a20}
 #slides img{width:100%;height:100%;object-fit:cover;display:block}
 /* Slideshow Home: pudar silang + zoom perlahan (Ken Burns) */
@@ -179,10 +182,11 @@ p{line-height:1.7;font-weight:300;font-size:.98rem}
   </div>
 </div>
 
-<button class="music" id="musicBtn" hidden aria-label="Putar atau jeda musik">♪</button>
-<audio id="bgm" loop preload="none"></audio>
+<audio id="bgm" loop preload="none" src="Janji.mp3"></audio>
 
 <main class="phone" id="app"></main>
+
+<button class="eq" id="eq" hidden aria-label="Putar atau jeda musik"><span class="eq-ico" id="eqIco">▶</span><span class="eq-bars" id="eqBars"></span></button>
 
 <nav class="menu" id="menu" hidden aria-label="Menu utama">
   <button data-go="home" class="on"><i>⌂</i><span>Home</span></button>
@@ -382,7 +386,7 @@ function render(data, to) {
   document.title = `Undangan Pernikahan ${pgPria} & ${pgWanita}`;
   $('coverNames').innerHTML = `${esc(pgPria)} &amp; ${esc(pgWanita)}`;
   $('guestName').textContent = to || 'Tamu Undangan';
-  if (m.musik) $('bgm').src = audioUrl(m.musik);
+  if (m.musik) $('bgm').src = audioUrl(m.musik);   // opsional: baris "musik" di Sheet menimpa Janji.mp3
   setDoor('.door.l', m.pintu_kiri);
   setDoor('.door.r', m.pintu_kanan);
 
@@ -557,7 +561,70 @@ addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimat
 addEventListener('resize', scrub);
 
 /* ===================== BUKA / TUTUP & MUSIK ===================== */
-const cover = $('cover'), openBtn = $('openBtn'), closeBtn = $('closeBtn'), musicBtn = $('musicBtn'), bgm = $('bgm');
+const cover = $('cover'), openBtn = $('openBtn'), closeBtn = $('closeBtn'), bgm = $('bgm');
+const eq = $('eq'), eqBars = $('eqBars'), eqIco = $('eqIco');
+let musicOk = true;
+
+/* ===== EQUALIZER: batang bergerak mengikuti musik (Web Audio) ===== */
+const NB = 28;
+eqBars.innerHTML = '<i></i>'.repeat(NB);
+const bars = [...eqBars.children], level = new Array(NB).fill(.12);
+let actx = null, analyser = null, fft = null, eqRaf = 0, analyserTried = false;
+
+// Musik diputar lebih dulu lewat pemutar biasa (pasti bunyi). Analyser baru dipasang SESUDAH musik jalan,
+// dan hanya bila AudioContext benar-benar "running" — kalau tidak, audio tidak dialihkan (agar tidak bisu).
+// Analisis hanya bisa untuk file satu asal dengan halaman (mis. Janji.mp3 di repo yang sama);
+// untuk sumber lain dipakai gerakan simulasi saja.
+async function setupAnalyser() {
+  if (analyserTried) return;
+  analyserTried = true;
+  try {
+    if (!/^https?:/.test(location.protocol)) return;
+    if (new URL(bgm.src, location.href).origin !== location.origin) return;
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state !== 'running') await ctx.resume();
+    if (ctx.state !== 'running') { ctx.close(); return; }
+    const src = ctx.createMediaElementSource(bgm);
+    const an = ctx.createAnalyser();
+    an.fftSize = 128; an.smoothingTimeConstant = .7;
+    src.connect(an); an.connect(ctx.destination);
+    fft = new Uint8Array(an.frequencyBinCount);
+    actx = ctx; analyser = an;
+  } catch (e) { console.warn(e); }
+}
+
+function eqLoop(t) {
+  const playing = !bgm.paused;
+  if (playing && analyser) analyser.getByteFrequencyData(fft);
+  let moving = playing;
+  for (let i = 0; i < NB; i++) {
+    let target = .12;
+    if (playing) {
+      if (analyser) {
+        const v = fft[1 + Math.floor(Math.pow(i / NB, 1.5) * 46)] / 255;
+        target = .1 + Math.min(1, v * (1 + i / NB * .9)) * .9;
+      } else {
+        target = .15 + .85 * Math.abs(Math.sin(t / 260 * (.6 + (i * 37 % 7) / 9) + i * 1.3)) * (.55 + .45 * Math.sin(t / 900 + i));
+      }
+    }
+    level[i] += (target - level[i]) * (target > level[i] ? .55 : .18);
+    if (level[i] > .13) moving = true;
+    bars[i].style.transform = `scaleY(${level[i].toFixed(3)})`;
+  }
+  eqRaf = moving ? requestAnimationFrame(eqLoop) : 0;
+}
+const eqStart = () => { if (!eqRaf) eqRaf = requestAnimationFrame(eqLoop); };
+
+bgm.addEventListener('play', () => { eqIco.textContent = '❚❚'; eqStart(); });
+bgm.addEventListener('pause', () => { eqIco.textContent = '▶'; eqStart(); });
+bgm.addEventListener('error', () => { musicOk = false; eq.hidden = true; });
+
+function playMusic() {
+  return bgm.play()
+    .then(() => setupAnalyser())
+    .catch(() => { eqIco.textContent = '▶'; });   // diblokir browser: pengunjung bisa ketuk equalizer
+}
+eq.addEventListener('click', () => { bgm.paused ? playMusic() : bgm.pause(); });
 
 openBtn.addEventListener('click', () => {
   if (openBtn.dataset.reload) return location.reload();
@@ -565,10 +632,7 @@ openBtn.addEventListener('click', () => {
   document.body.classList.remove('locked');
   menu.hidden = false;
   go('home');
-  if (bgm.getAttribute('src')) {
-    musicBtn.hidden = false;
-    bgm.play().then(() => musicBtn.classList.add('playing')).catch(() => {});
-  }
+  if (musicOk) { eq.hidden = false; playMusic(); }
   setTimeout(() => cover.classList.add('gone'), 1500);
 });
 closeBtn.addEventListener('click', () => {
@@ -576,13 +640,9 @@ closeBtn.addEventListener('click', () => {
   requestAnimationFrame(() => cover.classList.remove('open'));
   document.body.classList.add('locked');
   menu.hidden = true;
-  musicBtn.hidden = true;
-  bgm.pause(); musicBtn.classList.remove('playing');
+  eq.hidden = true;
+  bgm.pause();
   go('home');
-});
-musicBtn.addEventListener('click', () => {
-  if (bgm.paused) { bgm.play(); musicBtn.classList.add('playing'); }
-  else { bgm.pause(); musicBtn.classList.remove('playing'); }
 });
 
 /* ===================== GAMBAR PINTU (motif kawung + gunungan wayang) ===================== */
